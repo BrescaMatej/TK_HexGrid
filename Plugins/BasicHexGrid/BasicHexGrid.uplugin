@@ -1,0 +1,25 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "BasicHexGrid",
+	"Description": "Basic Hex Grid Implementatoin",
+	"Category": "DevTest",
+	"CreatedBy": "Matej Brescakovic",
+	"CreatedByURL": "https://github.com/BrescaMatej",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BasicHexGrid",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Sealed": true
+}
