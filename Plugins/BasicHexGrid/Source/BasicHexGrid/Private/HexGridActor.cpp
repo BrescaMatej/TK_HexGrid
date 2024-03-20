@@ -1,28 +1,29 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "HexGridActor.h"
 
-
-// Sets default values
 AHexGridActor::AHexGridActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-	//InitializeHexGrid(HexagonMap);
 }
 
 void AHexGridActor::InitializeHexGrid(TArray<FHexRow> GridMap)
 {
+	CleanupHexGrid();
+
+	AHexTileActor* HexActor = GetWorld()->SpawnActor<AHexTileActor>(HexTileTemplate);
+	
+	check(HexActor);
+	HexActor->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
+	
+	TArray<FTransform> InstanceTransforms;
 	for (FHexRow Row : GridMap)
 	{
 		for (FCubeHex Hex : Row.HexArr)
 		{
-			if (AHexTileActor* HexActor = GetWorld()->SpawnActor<AHexTileActor>(HexTileTemplate))
-			{
-				HexActor->SetActorLocation(HexActor->GetHexTilePosition(Hex));
-				
-				HexActor->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
-			}
+			InstanceTransforms.Add(FTransform(HexActor->GetHexTilePositionWorldSpace(Hex)));
 		}
 	}
+
+	HexActor->AddTileInstancesWorldSpace(InstanceTransforms);
 }
 
 void AHexGridActor::CleanupHexGrid()
@@ -31,6 +32,6 @@ void AHexGridActor::CleanupHexGrid()
 	GetAttachedActors(AttachedActors);
 	for (AActor* Attached : AttachedActors)
 	{
-		Attached->Destroy();
+		if (AHexTileActor* AsHexTile = Cast<AHexTileActor>(Attached)) Attached->Destroy();
 	}
 }

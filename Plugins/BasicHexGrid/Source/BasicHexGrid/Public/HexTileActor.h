@@ -1,9 +1,7 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
-#include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include <CoreMinimal.h>
+#include <GameFramework/Actor.h>
 #include "HexTileActor.generated.h"
 
 USTRUCT(BlueprintType)
@@ -34,30 +32,33 @@ struct FHexRow
 	FHexRow(TArray<FCubeHex> InArr) : HexArr(InArr){}
 };
 
-FORCEINLINE bool operator == (const FCubeHex& a, const FCubeHex& b)
-{
-	return a.q == b.q && a.r == b.r && a.s == b.s;
-}
+//FORCEINLINE bool operator == (const FCubeHex& a, const FCubeHex& b)
+//{
+//	return a.q == b.q && a.r == b.r && a.s == b.s;
+//}
+//
+//FORCEINLINE bool operator!= (const FCubeHex& a, const FCubeHex& b)
+//{
+//	return !(a == b);
+//}
+//
+//FORCEINLINE FCubeHex operator+= (const FCubeHex& a, const FCubeHex& b)
+//{
+//	return FCubeHex(a.q + b.q, a.r + b.r);
+//}
+//
+//FORCEINLINE FCubeHex operator-= (const FCubeHex& a, const FCubeHex& b)
+//{
+//	return FCubeHex(a.q - b.q, a.r - b.r);
+//}
+//
+//FORCEINLINE FCubeHex operator*= (const FCubeHex& a, const FCubeHex& b)
+//{
+//	return FCubeHex(a.q * b.q, a.r * b.r);
+//}
 
-FORCEINLINE bool operator!= (const FCubeHex& a, const FCubeHex& b)
-{
-	return !(a == b);
-}
 
-FORCEINLINE FCubeHex operator+= (const FCubeHex& a, const FCubeHex& b)
-{
-	return FCubeHex(a.q + b.q, a.r + b.r);
-}
-
-FORCEINLINE FCubeHex operator-= (const FCubeHex& a, const FCubeHex& b)
-{
-	return FCubeHex(a.q - b.q, a.r - b.r);
-}
-
-FORCEINLINE FCubeHex operator*= (const FCubeHex& a, const FCubeHex& b)
-{
-	return FCubeHex(a.q * b.q, a.r * b.r);
-}
+class UInstancedStaticMesh;
 
 UCLASS()
 class BASICHEXGRID_API AHexTileActor : public AActor
@@ -68,11 +69,20 @@ public:
 
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	FVector GetHexTilePosition(FCubeHex& Hex, float HexRadius = 50.0f, float ZOffset = 0.0f)
+	FVector GetHexTilePositionWorldSpace(FCubeHex& Hex, float HexRadius = 50.0f, float ZOffset = 0.0f)
 	{
 		float PosX = HexRadius * (FMath::Sqrt(3.0f) * Hex.q + FMath::Sqrt(3.0) / 2 * Hex.r);
 		float PosY = HexRadius * 3.0 / 2 * Hex.r;
 		return FVector(PosX, PosY, ZOffset);
 	}
+
+	UFUNCTION(BlueprintCallable)
+	void ClearTileInstances();
+
+	UFUNCTION()
+	void AddTileInstancesWorldSpace(TArray<FTransform> Instances);
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UInstancedStaticMeshComponent* HexTileInstancedMesh = nullptr;
 };
 

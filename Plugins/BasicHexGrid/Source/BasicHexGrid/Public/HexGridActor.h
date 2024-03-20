@@ -2,11 +2,11 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
+#include <CoreMinimal.h>
 
 #include "HexTileActor.h"
 
-#include "GameFramework/Actor.h"
+#include <GameFramework/Actor.h>
 #include "HexGridActor.generated.h"
 
 UCLASS()
