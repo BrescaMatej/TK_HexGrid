@@ -31,6 +31,6 @@ void AHexGridActor::CleanupHexGrid()
 	GetAttachedActors(AttachedActors);
 	for (AActor* Attached : AttachedActors)
 	{
-		Attached->MarkAsGarbage();
+		Attached->Destroy();
 	}
 }
