@@ -1,4 +1,5 @@
 #include "HexGridActor.h"
+#include "HexTileActor.h"
 
 AHexGridActor::AHexGridActor()
 {
@@ -10,24 +11,26 @@ void AHexGridActor::InitializeHexGrid(TArray<FHexRow> GridMap)
 	CleanupHexGrid();
 
 	AHexTileActor* HexActor = GetWorld()->SpawnActor<AHexTileActor>(HexTileTemplate);
-	
-	check(HexActor);
+	// check(HexActor);
 	HexActor->AttachToActor(this, FAttachmentTransformRules::KeepWorldTransform);
 	
 	TArray<FTransform> InstanceTransforms;
 	for (FHexRow Row : GridMap)
 	{
-		for (FCubeHex Hex : Row.HexArr)
+		for (FHex Hex : Row.GetArr())
 		{
-			InstanceTransforms.Add(FTransform(HexActor->GetHexTilePositionWorldSpace(Hex)));
+			InstanceTransforms.Add(FTransform(GetHexTilePositionWorldSpace(Hex)));
 		}
 	}
 
 	HexActor->AddTileInstancesWorldSpace(InstanceTransforms);
+	HexGridMap.Append(GridMap);
 }
 
 void AHexGridActor::CleanupHexGrid()
 {
+	HexGridMap.Empty();
+
 	TArray<AActor*> AttachedActors;
 	GetAttachedActors(AttachedActors);
 	for (AActor* Attached : AttachedActors)

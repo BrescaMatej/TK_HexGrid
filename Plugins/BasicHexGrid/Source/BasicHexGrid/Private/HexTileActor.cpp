@@ -1,12 +1,13 @@
 #include "HexTileActor.h"
-#include "Components/InstancedStaticMeshComponent.h"
+#include <Components/InstancedStaticMeshComponent.h>
 
 AHexTileActor::AHexTileActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
 	
 	HexTileInstancedMesh = CreateDefaultSubobject<UInstancedStaticMeshComponent>(TEXT("Hex Tile Mesh"));
-	check(HexTileInstancedMesh); // Must be valid
+	SetRootComponent(HexTileInstancedMesh);
+	// check(HexTileInstancedMesh); // Must be valid
 }
 
 void AHexTileActor::ClearTileInstances()
